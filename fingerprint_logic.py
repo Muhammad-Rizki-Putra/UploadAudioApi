@@ -224,11 +224,11 @@ def insert_song_and_fingerprints(conn, file_path, batch_size=5000):
 
 
 # Alternative: Ultra-fast bulk insert using execute_values
-def insert_song_and_fingerprints_fast(conn, file_path, batch_size=5000):
+def insert_song_and_fingerprints_fast(conn, file_path, original_filename, batch_size=5000):
     """Ultra-fast version using execute_values for bulk inserts."""
     try:
         
-        song_name = os.path.basename(file_path).replace('.mp3', '')
+        song_name = os.path.splitext(original_filename)[0]
         cursor = conn.cursor()
 
         # Check if song already exists
