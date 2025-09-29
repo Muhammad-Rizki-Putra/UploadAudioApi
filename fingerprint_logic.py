@@ -269,7 +269,7 @@ def insert_song_and_fingerprints_fast(conn, file_path, original_filename, batch_
         # Use execute_values for ultra-fast bulk insert
         execute_values(
             cursor,
-            """INSERT INTO "cala_mdm_fingerprints" (szsongid, offsettime, inthash) VALUES %s""",
+            """INSERT INTO "CALA_MDM_FINGERPRINTS" (szsongid, offsettime, inthash) VALUES %s""",
             fingerprint_tuples,
             template=None,
             page_size=batch_size
