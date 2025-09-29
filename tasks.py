@@ -2,6 +2,7 @@ import os
 import ssl
 import tempfile
 import requests
+import shutil
 from celery import Celery
 
 # Import your database and fingerprinting logic
