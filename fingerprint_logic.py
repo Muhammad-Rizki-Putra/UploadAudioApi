@@ -151,7 +151,7 @@ def insert_song_and_fingerprints(conn, file_path, batch_size=5000):
         print(f"Inserting {len(fingerprints)} fingerprints in batches of {batch_size}...")
         
         # Prepare fingerprint data
-        fingerprint_tuples = [(song_id, offset_time, hash_value) for hash_value, offset_time in fingerprints]
+        fingerprint_tuples = [(song_id, float(offset_time), hash_value) for hash_value, offset_time in fingerprints]
         
         # SOLUTION 1: Use COPY FROM for maximum performance
         try:
