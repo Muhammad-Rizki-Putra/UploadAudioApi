@@ -45,9 +45,9 @@ def fingerprint_song(file_path):
               Returns an empty list if an error occurs.
     """
     try:
-
+        TARGET_SR = 11025
         # loading song  
-        y, sr = librosa.load(file_path)
+        y, sr = librosa.load(file_path, sr=TARGET_SR)
 
         # fourier transformation
         D = librosa.stft(y)
