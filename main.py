@@ -27,21 +27,20 @@ class UploadURL(BaseModel):
     original_filename: str
 
 @app.post("/upload-song/")
-async def create_upload_file(audio_file: UploadFile = File(...)):
+async def create_upload_file(data: UploadURL): 
     """
-    This endpoint is now VERY FAST.
-    It uploads to Cloudinary, creates a background job, and returns immediately.
+    Accepts the Cloudinary URL from the frontend and dispatches the background task.
     """
     try:
-      process_fingerprints.delay(data.file_url, data.original_filename)
-      
-      return JSONResponse(
-            status_code=202, # 202 Accepted
+        process_fingerprints.delay(data.file_url, data.original_filename)
+        
+        return JSONResponse(
+            status_code=202,
             content={"status": "queued", "message": f"'{data.original_filename}' has been accepted and is being processed in the background."}
         )
 
     except Exception as e:
-       return HTTPException(status_code=500, detail=f"Failed to queue job: {str(e)}")
+        return HTTPException(status_code=500, detail=f"Failed to queue job: {str(e)}")
 
 @app.get("/")
 def read_root():
