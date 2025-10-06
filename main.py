@@ -21,6 +21,10 @@ cloudinary.config(
 app = FastAPI(title="Song Fingerprinting Uploader API")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
+class UploadURL(BaseModel):
+    file_url: str
+    original_filename: str
+
 @app.post("/upload-song/")
 async def create_upload_file(audio_file: UploadFile = File(...)):
     """
@@ -28,25 +32,15 @@ async def create_upload_file(audio_file: UploadFile = File(...)):
     It uploads to Cloudinary, creates a background job, and returns immediately.
     """
     try:
-        # 1. Upload the file to Cloudinary
-        upload_result = cloudinary.uploader.upload(
-            audio_file.file,
-            resource_type="video"
-        )
-        file_url = upload_result.get('secure_url')
-        if not file_url:
-            raise HTTPException(status_code=500, detail="Failed to upload file to Cloudinary.")
-
-        # 2. Create the background job with the Cloudinary URL
-        process_fingerprints.delay(file_url, audio_file.filename)
-
-        # 3. Immediately return a success response to the user
-        return JSONResponse(
+      process_fingerprints.delay(data.file_url, data.original_filename)
+      
+      return JSONResponse(
             status_code=202, # 202 Accepted
-            content={"status": "queued", "message": f"'{audio_file.filename}' has been accepted and is being processed in the background."}
+            content={"status": "queued", "message": f"'{data.original_filename}' has been accepted and is being processed in the background."}
         )
+
     except Exception as e:
-        return HTTPException(status_code=500, detail=str(e))
+       return HTTPException(status_code=500, detail=f"Failed to queue job: {str(e)}")
 
 @app.get("/")
 def read_root():
