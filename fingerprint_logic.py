@@ -185,9 +185,9 @@ def insert_song_and_fingerprints(conn, file_path, batch_size=5000):
             
             fingerprint_query = """
             INSERT INTO CALA_MDM_FINGERPRINTS (
-                szSongID,
-                offSetTime,
-                intHash
+                "szSongID",
+                "offSetTime",
+                "intHash"
             ) VALUES (%s, %s, %s)
             """
             
