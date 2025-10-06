@@ -264,7 +264,7 @@ def insert_song_and_fingerprints_fast(conn, file_path, original_filename, batch_
         print(f"Inserting {len(fingerprints)} fingerprints using execute_values...")
         
         # Prepare data for execute_values
-        fingerprint_tuples = [(song_id, offset_time, hash_value) for hash_value, offset_time in fingerprints]
+        fingerprint_tuples = [(song_id, float(offset_time), hash_value) for hash_value, offset_time in fingerprints]
         
         # Use execute_values for ultra-fast bulk insert
         execute_values(
